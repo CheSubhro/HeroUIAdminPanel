@@ -1,6 +1,7 @@
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, test, expect, vi, beforeEach } from "vitest";
 import ProductForm from "../ProductForm";
 
 describe("ProductForm Component", () => {
@@ -9,11 +10,11 @@ describe("ProductForm Component", () => {
         { id: "2", name: "Accessories" },
     ];
 
-    const mockSubmit = jest.fn();
-    const mockCancel = jest.fn();
+    const mockSubmit = vi.fn();
+    const mockCancel = vi.fn();
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("renders form fields correctly for adding a new product", () => {
@@ -26,11 +27,11 @@ describe("ProductForm Component", () => {
             />
         );
 
-        expect(screen.getByLabelText(/product name/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/slug/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/price/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/stock/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/enter product name/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/product-slug/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/enter product description/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/enter price/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/enter stock/i)).toBeInTheDocument();
         expect(screen.getByText(/add product/i)).toBeInTheDocument();
     });
 
@@ -60,7 +61,7 @@ describe("ProductForm Component", () => {
             />
         );
 
-        const nameInput = screen.getByLabelText(/product name/i);
+        const nameInput = screen.getByPlaceholderText(/enter product name/i);
         fireEvent.change(nameInput, { target: { value: "New Gaming Mouse" } });
 
         expect(nameInput.value).toBe("New Gaming Mouse");
@@ -88,9 +89,9 @@ describe("ProductForm Component", () => {
             />
         );
 
-        expect(screen.getByLabelText(/product name/i).value).toBe("Pro Wireless Mouse");
-        expect(screen.getByLabelText(/slug/i).value).toBe("pro-wireless-mouse");
-        expect(screen.getByLabelText(/price/i).value).toBe("59.99");
+        expect(screen.getByPlaceholderText(/enter product name/i).value).toBe("Pro Wireless Mouse");
+        expect(screen.getByPlaceholderText(/product-slug/i).value).toBe("pro-wireless-mouse");
+        expect(screen.getByPlaceholderText(/enter price/i).value).toBe("59.99");
         expect(screen.getByRole("button", { name: /update product/i })).toBeInTheDocument();
     });
 });
