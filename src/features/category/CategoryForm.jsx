@@ -2,10 +2,16 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input } from "../../components/common";
 import { validateCategory } from "../../utils/validation";
+import { FaImage, FaTimes } from "react-icons/fa";
 
 export default function CategoryForm({ initialData, categoriesList, onSubmit, onCancel }) {
-    
-    const [formData, setFormData] = useState({ name: "", description: "", parentId: "" });
+    const [formData, setFormData] = useState({ 
+        name: "", 
+        description: "", 
+        parentId: "", 
+        avatar: null 
+    });
+    const [previewUrl, setPreviewUrl] = useState("");
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -13,10 +19,13 @@ export default function CategoryForm({ initialData, categoriesList, onSubmit, on
             setFormData({
                 name: initialData.name || "",
                 description: initialData.description || "",
-                parentId: initialData.parentId || ""
+                parentId: initialData.parentId || "",
+                avatar: null // existing image URL alada rakhte paren jodi dorkar hoy
             });
+            setPreviewUrl(initialData.avatar || "");
         } else {
-            setFormData({ name: "", description: "", parentId: "" });
+            setFormData({ name: "", description: "", parentId: "", avatar: null });
+            setPreviewUrl("");
         }
     }, [initialData]);
 
@@ -28,6 +37,19 @@ export default function CategoryForm({ initialData, categoriesList, onSubmit, on
         }
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData((prev) => ({ ...prev, avatar: file }));
+            setPreviewUrl(URL.createObjectURL(file));
+        }
+    };
+
+    const handleRemoveImage = () => {
+        setFormData((prev) => ({ ...prev, avatar: null }));
+        setPreviewUrl("");
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validateCategory(formData);
@@ -35,7 +57,17 @@ export default function CategoryForm({ initialData, categoriesList, onSubmit, on
             setErrors(validationErrors);
             return;
         }
-        onSubmit(formData);
+
+        // Backend e pathanor jonno FormData use kora best hobe jodi file thake
+        const dataToSend = new FormData();
+        dataToSend.append("name", formData.name);
+        dataToSend.append("description", formData.description);
+        dataToSend.append("parentId", formData.parentId);
+        if (formData.avatar) {
+            dataToSend.append("avatar", formData.avatar);
+        }
+
+        onSubmit(dataToSend);
     };
 
     return (
@@ -50,6 +82,32 @@ export default function CategoryForm({ initialData, categoriesList, onSubmit, on
                 />
                 {errors.name && (
                     <span className="text-xs text-danger mt-1 block">{errors.name}</span>
+                )}
+            </div>
+
+            {/* Avatar File Upload Field */}
+            <div>
+                <label className="block text-xs font-semibold text-gray-400 mb-1">Avatar / Image (Optional)</label>
+                {previewUrl ? (
+                    <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-700 bg-[#0f1117]">
+                        <img src={previewUrl} alt="Avatar preview" className="w-full h-full object-cover" />
+                        <button
+                            type="button"
+                            onClick={handleRemoveImage}
+                            className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full text-xs hover:bg-red-700 transition"
+                        >
+                            <FaTimes />
+                        </button>
+                    </div>
+                ) : (
+                    <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-700 border-dashed rounded-lg cursor-pointer bg-[#0f1117] hover:bg-gray-800/50 transition">
+                        <div className="flex flex-col items-center justify-center pt-3 pb-4">
+                            <FaImage className="text-gray-400 text-xl mb-1" />
+                            <p className="text-xs text-gray-400"><span className="font-semibold text-blue-400">Click to upload</span> or drag and drop</p>
+                            <p className="text-[10px] text-gray-500 mt-0.5">SVG, PNG, JPG or WEBP</p>
+                        </div>
+                        <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} className="hidden" />
+                    </label>
                 )}
             </div>
 
@@ -73,7 +131,7 @@ export default function CategoryForm({ initialData, categoriesList, onSubmit, on
                 >
                     <option value="">None (Main Category)</option>
                     {categoriesList
-                        ?.filter((cat) => cat.id !== initialData?.id) // Prevent self-parenting
+                        ?.filter((cat) => cat.id !== initialData?.id)
                         .map((cat) => (
                             <option key={cat.id} value={cat.id}>
                                 {cat.name}
