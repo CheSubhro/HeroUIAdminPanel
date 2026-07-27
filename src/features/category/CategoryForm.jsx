@@ -3,16 +3,20 @@ import React, { useState, useEffect } from "react";
 import { Button, Input } from "../../components/common";
 import { validateCategory } from "../../utils/validation";
 
-export default function CategoryForm({ initialData, onSubmit, onCancel }) {
+export default function CategoryForm({ initialData, categoriesList, onSubmit, onCancel }) {
     
-    const [formData, setFormData] = useState({ name: "", description: "" });
+    const [formData, setFormData] = useState({ name: "", description: "", parentId: "" });
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (initialData) {
-            setFormData(initialData);
+            setFormData({
+                name: initialData.name || "",
+                description: initialData.description || "",
+                parentId: initialData.parentId || ""
+            });
         } else {
-            setFormData({ name: "", description: "" });
+            setFormData({ name: "", description: "", parentId: "" });
         }
     }, [initialData]);
 
@@ -57,6 +61,25 @@ export default function CategoryForm({ initialData, onSubmit, onCancel }) {
                     value={formData.description}
                     onChange={handleChange}
                 />
+            </div>
+
+            <div>
+                <label className="block text-xs font-semibold text-gray-400 mb-1">Parent Category (Optional)</label>
+                <select
+                    name="parentId"
+                    value={formData.parentId}
+                    onChange={handleChange}
+                    className="w-full bg-[#0f1117] border border-gray-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
+                >
+                    <option value="">None (Main Category)</option>
+                    {categoriesList
+                        ?.filter((cat) => cat.id !== initialData?.id) // Prevent self-parenting
+                        .map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
+                </select>
             </div>
 
             <div className="flex justify-end gap-2 pt-4">

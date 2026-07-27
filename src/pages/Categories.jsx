@@ -7,16 +7,18 @@ import { FaPlus, FaSearch } from "react-icons/fa";
 
 export default function Categories() {
     const [categories, setCategories] = useState([
-        { id: 1, name: "Electronics", slug: "electronics", description: "Gadgets, smartphones and home appliances.", productCount: 12 },
-        { id: 2, name: "Clothing", slug: "clothing", description: "Men and women fashion wear.", productCount: 25 },
+        { id: 1, name: "Electronics", slug: "electronics", description: "Gadgets, smartphones and home appliances.", productCount: 12, parentId: "" },
+        { id: 2, name: "Clothing", slug: "clothing", description: "Men and women fashion wear.", productCount: 25, parentId: "" },
     ]);
     
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedIds, setSelectedIds] = useState([]);
     const rowsPerPage = 5;
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isBulkDeleteOpen, setIsBulkDeleteOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categoryToDelete, setCategoryToDelete] = useState(null);
 
@@ -35,9 +37,23 @@ export default function Categories() {
 
     const totalPages = Math.ceil(filteredCategories.length / rowsPerPage) || 1;
 
+    // Selection Handlers
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedIds(paginatedCategories.map((cat) => cat.id));
+        } else {
+            setSelectedIds([]);
+        }
+    };
+
+    const handleSelectOne = (id) => {
+        setSelectedIds((prev) =>
+            prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+        );
+    };
+
     const handleFormSubmit = (data) => {
-        // Auto generate slug from name if not provided
-        const slug = data.name.toLowerCase().replace(/\\s+/g, '-');
+        const slug = data.name.toLowerCase().replace(/\s+/g, '-');
         if (selectedCategory) {
             setCategories((prev) =>
                 prev.map((item) => (item.id === selectedCategory.id ? { ...item, ...data, slug } : item))
@@ -57,6 +73,12 @@ export default function Categories() {
         }
     };
 
+    const handleBulkDelete = () => {
+        setCategories((prev) => prev.filter((item) => !selectedIds.includes(item.id)));
+        setSelectedIds([]);
+        setIsBulkDeleteOpen(false);
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -69,6 +91,16 @@ export default function Categories() {
                     <FaPlus /> Add Category
                 </Button>
             </div>
+
+            {/* Bulk Action Toolbar */}
+            {selectedIds.length > 0 && (
+                <div className="flex items-center justify-between bg-blue-500/10 border border-blue-500/30 p-3 rounded-xl">
+                    <span className="text-sm text-blue-400 font-semibold">{selectedIds.length} categories selected</span>
+                    <Button size="sm" color="danger" variant="flat" onClick={() => setIsBulkDeleteOpen(true)}>
+                        Delete Selected
+                    </Button>
+                </div>
+            )}
 
             {/* Search Bar & Controls */}
             <div className="flex items-center justify-between gap-4 bg-[#181b22] p-4 rounded-xl border border-gray-800">
@@ -90,6 +122,9 @@ export default function Categories() {
             {/* Modular Table Component */}
             <CategoryTable
                 categories={paginatedCategories}
+                selectedIds={selectedIds}
+                onSelectAll={handleSelectAll}
+                onSelectOne={handleSelectOne}
                 onEdit={(cat) => { setSelectedCategory(cat); setIsFormOpen(true); }}
                 onDelete={(cat) => { setCategoryToDelete(cat); setIsDeleteOpen(true); }}
                 onAdd={() => { setSelectedCategory(null); setIsFormOpen(true); }}
@@ -106,7 +141,7 @@ export default function Categories() {
                 </div>
             )}
 
-            {/* Modals... */}
+            {/* Modals */}
             <Modal
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
@@ -114,6 +149,7 @@ export default function Categories() {
             >
                 <CategoryForm
                     initialData={selectedCategory}
+                    categoriesList={categories}
                     onSubmit={handleFormSubmit}
                     onCancel={() => setIsFormOpen(false)}
                 />
@@ -125,6 +161,14 @@ export default function Categories() {
                 onConfirm={handleDelete}
                 title="Delete Category"
                 message={`Are you sure you want to delete "${categoryToDelete?.name}"? This action cannot be undone.`}
+            />
+
+            <ConfirmModal
+                isOpen={isBulkDeleteOpen}
+                onClose={() => setIsBulkDeleteOpen(false)}
+                onConfirm={handleBulkDelete}
+                title="Delete Selected Categories"
+                message={`Are you sure you want to delete ${selectedIds.length} selected categories? This action cannot be undone.`}
             />
         </div>
     );
