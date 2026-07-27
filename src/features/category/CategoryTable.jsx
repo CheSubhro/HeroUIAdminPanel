@@ -4,6 +4,7 @@ import { Button, Card, EmptyState } from '../../components/common';
 import { FaEdit, FaTrash, FaListAlt, FaImage } from 'react-icons/fa';
 
 export default function CategoryTable({ categories, selectedIds, onSelectAll, onSelectOne, onEdit, onDelete, onAdd }) {
+    
     const isAllSelected = categories.length > 0 && selectedIds.length === categories.length;
 
     return (
@@ -61,25 +62,32 @@ export default function CategoryTable({ categories, selectedIds, onSelectAll, on
                                             {cat.productCount || 0} items
                                         </span>
                                     </td>
-                                    <td className="py-3 px-4 text-right space-x-1">
-                                        <Button
-                                            isIconOnly
-                                            variant="light"
-                                            size="sm"
-                                            onClick={() => onEdit(cat)}
-                                            className="text-blue-400 hover:bg-blue-500/10"
-                                        >
-                                            <FaEdit />
-                                        </Button>
-                                        <Button
-                                            isIconOnly
-                                            variant="light"
-                                            size="sm"
-                                            onClick={() => onDelete(cat)}
-                                            className="text-red-400 hover:bg-red-500/10"
-                                        >
-                                            <FaTrash />
-                                        </Button>
+                                    <td className="py-3 px-4 text-right">
+                                        <div className="flex items-center justify-end gap-2">
+                                            {/* Edit Button */}
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="flat"
+                                                onClick={() => onEdit(cat)}
+                                                className="bg-blue-500/10 border-blue-500/20 text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/40 shadow-none"
+                                                title="Edit Category"
+                                            >
+                                                <FaEdit className="text-xs" />
+                                            </Button>
+
+                                            {/* Delete Button */}
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="flat"
+                                                onClick={() => onDelete(cat)}
+                                                className="bg-rose-500/10 border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/40 shadow-none"
+                                                title="Delete Category"
+                                            >
+                                                <FaTrash className="text-xs" />
+                                            </Button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
