@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import NewsletterForm from '../../../features/newsletter/NewsletterForm';
 
 export default function Footer() {
 
@@ -62,10 +61,6 @@ export default function Footer() {
                             <li><Link to="/terms" className="hover:text-teal-400 transition-colors">Terms of Service</Link></li>
                         </ul>
                     </div>
-
-                    {/* Column 4: Newsletter Subscription (Span 4) */}
-                    <NewsletterForm />
-
                 </div>
 
                 {/* Bottom Bar: Copyright & Credit */}
