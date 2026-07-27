@@ -4,7 +4,7 @@ import { Button, Card, EmptyState } from '../../components/common';
 import { FaEdit, FaTrash, FaListAlt } from 'react-icons/fa';
 
 export default function CategoryTable({ categories, onEdit, onDelete, onAdd }) {
-    
+
     return (
         <Card className="p-6 bg-[#181b22] border border-gray-800 shadow-xl">
             {categories.length > 0 ? (
@@ -13,7 +13,9 @@ export default function CategoryTable({ categories, onEdit, onDelete, onAdd }) {
                         <thead>
                             <tr className="border-b border-gray-800 text-gray-300 text-sm font-semibold">
                                 <th className="py-3 px-4">Name</th>
+                                <th className="py-3 px-4">Slug</th>
                                 <th className="py-3 px-4">Description</th>
+                                <th className="py-3 px-4">Products</th>
                                 <th className="py-3 px-4 text-right">Actions</th>
                             </tr>
                         </thead>
@@ -21,7 +23,13 @@ export default function CategoryTable({ categories, onEdit, onDelete, onAdd }) {
                             {categories.map((cat) => (
                                 <tr key={cat.id} className="hover:bg-gray-800/40 transition-colors">
                                     <td className="py-3 px-4 font-bold text-white">{cat.name}</td>
-                                    <td className="py-3 px-4 text-gray-300 font-medium">{cat.description || "N/A"}</td>
+                                        <td className="py-3 px-4 text-gray-400 text-xs font-mono">{cat.slug}</td>
+                                        <td className="py-3 px-4 text-gray-300 font-medium">{cat.description || "N/A"}</td>
+                                        <td className="py-3 px-4">
+                                            <span className="bg-blue-500/10 text-blue-400 text-xs px-2.5 py-1 rounded-full font-semibold">
+                                                {cat.productCount || 0} items
+                                            </span>
+                                        </td>
                                     <td className="py-3 px-4 text-right space-x-1">
                                         <Button
                                             isIconOnly
