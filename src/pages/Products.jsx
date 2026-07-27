@@ -1,91 +1,38 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Button, Modal, ConfirmModal, Pagination } from "../components/common";
 import ProductForm from "../features/product/ProductForm";
 import ProductList from "../features/product/ProductList";
+import { useProducts } from "../hooks/useProducts";
 import { FaPlus, FaSearch } from "react-icons/fa";
 
 export default function ProductsPage() {
-    const [products, setProducts] = useState([
-        {
-            id: 1,
-            name: "Pro Wireless Mouse",
-            categoryName: "Electronics",
-            categoryId: "1",
-            price: 59.99,
-            stock: 25,
-            image: null,
-        },
-        {
-            id: 2,
-            name: "Mechanical Keyboard",
-            categoryName: "Electronics",
-            categoryId: "1",
-            price: 129.99,
-            stock: 0,
-            image: null,
-        },
-    ]);
-
-    const [categories] = useState([
-        { id: "1", name: "Electronics" },
-        { id: "2", name: "Accessories" },
-    ]);
-
-    const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
-
-    const [isFormOpen, setIsFormOpen] = useState(false);
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [productToDelete, setProductToDelete] = useState(null);
-
-    // Search & Filtering
-    const filteredProducts = products.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    // Pagination
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-    const paginatedProducts = filteredProducts.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-
-    const handleFormSubmit = (formData) => {
-        const categoryObj = categories.find((c) => c.id === formData.categoryId);
-        const categoryName = categoryObj ? categoryObj.name : "Uncategorized";
-
-        if (selectedProduct) {
-            // Update
-            setProducts(
-                products.map((p) =>
-                    p.id === selectedProduct.id
-                        ? { ...p, ...formData, categoryName }
-                        : p
-                )
-            );
-        } else {
-            // Create
-            const newProduct = {
-                id: Date.now(),
-                ...formData,
-                categoryName,
-            };
-            setProducts([newProduct, ...products]);
-        }
-        setIsFormOpen(false);
-        setSelectedProduct(null);
-    };
-
-    const handleDelete = () => {
-        if (productToDelete) {
-            setProducts(products.filter((p) => p.id !== productToDelete.id));
-            setIsDeleteOpen(false);
-            setProductToDelete(null);
-        }
-    };
+    const {
+        categories,
+        filteredProducts,
+        paginatedProducts,
+        searchQuery,
+        setSearchQuery,
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        selectedIds = [],
+        handleSelectAll,
+        handleSelectOne,
+        isFormOpen,
+        setIsFormOpen,
+        isDeleteOpen,
+        setIsDeleteOpen,
+        isBulkDeleteOpen,
+        setIsBulkDeleteOpen,
+        selectedProduct,
+        setSelectedProduct,
+        productToDelete,
+        setProductToDelete,
+        handleFormSubmit,
+        handleDelete,
+        handleBulkDelete
+    } = useProducts();
 
     return (
         <div className="space-y-6">
@@ -103,6 +50,16 @@ export default function ProductsPage() {
                     <FaPlus /> Add Product
                 </Button>
             </div>
+
+            {/* Bulk Action Toolbar */}
+            {selectedIds.length > 0 && (
+                <div className="flex items-center justify-between bg-blue-500/10 border border-blue-500/30 p-3 rounded-xl">
+                    <span className="text-sm text-blue-400 font-semibold">{selectedIds.length} products selected</span>
+                    <Button size="sm" color="danger" variant="flat" onClick={() => setIsBulkDeleteOpen(true)}>
+                        Delete Selected
+                    </Button>
+                </div>
+            )}
 
             {/* Search Bar & Controls */}
             <div className="flex items-center justify-between gap-4 bg-[#181b22] p-4 rounded-xl border border-gray-800">
@@ -124,6 +81,9 @@ export default function ProductsPage() {
             {/* Modular Product List Component */}
             <ProductList
                 products={paginatedProducts}
+                selectedIds={selectedIds}
+                onSelectAll={handleSelectAll}
+                onSelectOne={handleSelectOne}
                 onAdd={() => { setSelectedProduct(null); setIsFormOpen(true); }}
                 onEdit={(product) => { setSelectedProduct(product); setIsFormOpen(true); }}
                 onDelete={(product) => { setProductToDelete(product); setIsDeleteOpen(true); }}
@@ -147,7 +107,7 @@ export default function ProductsPage() {
                 title={selectedProduct ? "Edit Product" : "Add New Product"}
             >
                 <ProductForm
-                    initialData={selectedProduct || {}}
+                    initialData={selectedProduct}
                     categories={categories}
                     onSubmit={handleFormSubmit}
                     onCancel={() => setIsFormOpen(false)}
@@ -160,6 +120,14 @@ export default function ProductsPage() {
                 onConfirm={handleDelete}
                 title="Delete Product"
                 message={`Are you sure you want to delete "${productToDelete?.name}"? This action cannot be undone.`}
+            />
+
+            <ConfirmModal
+                isOpen={isBulkDeleteOpen}
+                onClose={() => setIsBulkDeleteOpen(false)}
+                onConfirm={handleBulkDelete}
+                title="Delete Selected Products"
+                message={`Are you sure you want to delete ${selectedIds.length} selected products? This action cannot be undone.`}
             />
         </div>
     );

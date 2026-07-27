@@ -23,8 +23,18 @@ export const validateProduct = (data) => {
         errors.name = "Product name is required.";
     }
 
-    if (!data.price || isNaN(data.price) || Number(data.price) <= 0) {
+    if (!data.slug || data.slug.trim() === "") {
+        errors.slug = "Slug is required.";
+    }
+
+    if (!data.price || isNaN(data.price) || Number(data.price) < 0) {
         errors.price = "Valid price is required.";
+    }
+
+    if (data.discountPrice && (isNaN(data.discountPrice) || Number(data.discountPrice) < 0)) {
+        errors.discountPrice = "Valid discount price is required.";
+    } else if (data.discountPrice && Number(data.discountPrice) >= Number(data.price)) {
+        errors.discountPrice = "Discount price must be less than the regular price.";
     }
 
     if (!data.stock || isNaN(data.stock) || Number(data.stock) < 0) {
@@ -32,7 +42,11 @@ export const validateProduct = (data) => {
     }
 
     if (!data.categoryId) {
-        errors.categoryId = "Please select a category.";
+        errors.categoryId = "Category is required.";
+    }
+
+    if (!data.isEdit && !data.image) {
+        errors.image = "Product image is required.";
     }
 
     return errors;

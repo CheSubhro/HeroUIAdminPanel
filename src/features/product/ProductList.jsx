@@ -23,7 +23,6 @@ export default function ProductList({
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="border-b border-gray-800 text-gray-300 text-sm font-semibold">
-
                                 <th className="py-3 px-4 w-10">
                                     <input
                                         type="checkbox"
@@ -32,49 +31,26 @@ export default function ProductList({
                                         className="rounded bg-[#0f1117] border-gray-700 text-blue-600 focus:ring-0 cursor-pointer"
                                     />
                                 </th>
-
-                                <th className="py-3 px-4 w-16">
-                                    Image
-                                </th>
-
-                                <th className="py-3 px-4">
-                                    Product Name
-                                </th>
-
-                                <th className="py-3 px-4">
-                                    Category
-                                </th>
-
-                                <th className="py-3 px-4">
-                                    Price
-                                </th>
-
-                                <th className="py-3 px-4">
-                                    Stock
-                                </th>
-
-                                <th className="py-3 px-4 text-right">
-                                    Actions
-                                </th>
-
+                                <th className="py-3 px-4 w-16">Image</th>
+                                <th className="py-3 px-4">Product Name</th>
+                                <th className="py-3 px-4">Category</th>
+                                <th className="py-3 px-4">Price</th>
+                                <th className="py-3 px-4">Stock</th>
+                                <th className="py-3 px-4 text-right">Actions</th>
                             </tr>
                         </thead>
-
                         <tbody className="divide-y divide-gray-800/60 text-sm">
                             {products.map((product) => (
                                 <tr
                                     key={product.id}
                                     className="hover:bg-gray-800/40 transition-colors"
                                 >
-
-                                    {/* Select */}
+                                    {/* Select Checkbox */}
                                     <td className="py-3 px-4">
                                         <input
                                             type="checkbox"
                                             checked={selectedIds.includes(product.id)}
-                                            onChange={() =>
-                                                onSelectOne(product.id)
-                                            }
+                                            onChange={() => onSelectOne(product.id)}
                                             className="rounded bg-[#0f1117] border-gray-700 text-blue-600 focus:ring-0 cursor-pointer"
                                         />
                                     </td>
@@ -106,7 +82,7 @@ export default function ProductList({
 
                                     {/* Price */}
                                     <td className="py-3 px-4 text-gray-300 font-medium">
-                                    ₹{Number(product.price || 0).toFixed(2)}
+                                        ₹{Number(product.price || 0).toFixed(2)}
                                     </td>
 
                                     {/* Stock */}
@@ -125,8 +101,6 @@ export default function ProductList({
                                     {/* Actions */}
                                     <td className="py-3 px-4 text-right">
                                         <div className="flex items-center justify-end gap-2">
-
-                                            {/* Edit */}
                                             <Button
                                                 isIconOnly
                                                 size="sm"
@@ -137,8 +111,6 @@ export default function ProductList({
                                             >
                                                 <FaEdit className="text-xs" />
                                             </Button>
-
-                                            {/* Delete */}
                                             <Button
                                                 isIconOnly
                                                 size="sm"
@@ -149,10 +121,8 @@ export default function ProductList({
                                             >
                                                 <FaTrash className="text-xs" />
                                             </Button>
-
                                         </div>
                                     </td>
-
                                 </tr>
                             ))}
                         </tbody>
