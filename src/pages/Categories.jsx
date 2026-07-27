@@ -1,83 +1,38 @@
 
-import React, { useState, useMemo } from "react";
+import React from "react";
 import { Button, Modal, ConfirmModal, Pagination } from "../components/common";
 import CategoryForm from "../features/category/CategoryForm";
 import CategoryTable from "../features/category/CategoryTable";
+import { useCategories } from "../hooks/useCategories";
 import { FaPlus, FaSearch } from "react-icons/fa";
 
 export default function Categories() {
-    const [categories, setCategories] = useState([
-        { id: 1, name: "Electronics", slug: "electronics", description: "Gadgets, smartphones and home appliances.", productCount: 12, parentId: "" },
-        { id: 2, name: "Clothing", slug: "clothing", description: "Men and women fashion wear.", productCount: 25, parentId: "" },
-    ]);
-    
-    const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [selectedIds, setSelectedIds] = useState([]);
-    const rowsPerPage = 5;
-
-    const [isFormOpen, setIsFormOpen] = useState(false);
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const [isBulkDeleteOpen, setIsBulkDeleteOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [categoryToDelete, setCategoryToDelete] = useState(null);
-
-    // Search & Pagination Logic
-    const filteredCategories = useMemo(() => {
-        return categories.filter((cat) =>
-            cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            cat.description.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    }, [categories, searchQuery]);
-
-    const paginatedCategories = useMemo(() => {
-        const start = (currentPage - 1) * rowsPerPage;
-        return filteredCategories.slice(start, start + rowsPerPage);
-    }, [filteredCategories, currentPage]);
-
-    const totalPages = Math.ceil(filteredCategories.length / rowsPerPage) || 1;
-
-    // Selection Handlers
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            setSelectedIds(paginatedCategories.map((cat) => cat.id));
-        } else {
-            setSelectedIds([]);
-        }
-    };
-
-    const handleSelectOne = (id) => {
-        setSelectedIds((prev) =>
-            prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-        );
-    };
-
-    const handleFormSubmit = (data) => {
-        const slug = data.name.toLowerCase().replace(/\s+/g, '-');
-        if (selectedCategory) {
-            setCategories((prev) =>
-                prev.map((item) => (item.id === selectedCategory.id ? { ...item, ...data, slug } : item))
-            );
-        } else {
-            const newCategory = { id: Date.now(), ...data, slug, productCount: 0 };
-            setCategories((prev) => [...prev, newCategory]);
-        }
-        setIsFormOpen(false);
-    };
-
-    const handleDelete = () => {
-        if (categoryToDelete) {
-            setCategories((prev) => prev.filter((item) => item.id !== categoryToDelete.id));
-            setIsDeleteOpen(false);
-            setCategoryToDelete(null);
-        }
-    };
-
-    const handleBulkDelete = () => {
-        setCategories((prev) => prev.filter((item) => !selectedIds.includes(item.id)));
-        setSelectedIds([]);
-        setIsBulkDeleteOpen(false);
-    };
+    const {
+        categories,
+        filteredCategories,
+        paginatedCategories,
+        searchQuery,
+        setSearchQuery,
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        selectedIds,
+        handleSelectAll,
+        handleSelectOne,
+        isFormOpen,
+        setIsFormOpen,
+        isDeleteOpen,
+        setIsDeleteOpen,
+        isBulkDeleteOpen,
+        setIsBulkDeleteOpen,
+        selectedCategory,
+        setSelectedCategory,
+        categoryToDelete,
+        setCategoryToDelete,
+        handleFormSubmit,
+        handleDelete,
+        handleBulkDelete
+    } = useCategories();
 
     return (
         <div className="space-y-6">
