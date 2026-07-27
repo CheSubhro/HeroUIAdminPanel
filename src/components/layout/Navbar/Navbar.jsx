@@ -5,6 +5,7 @@ import { FaBell, FaSearch } from "react-icons/fa";
 import { Badge } from "../../common"; 
 
 export default function Navbar() {
+    
     const navigate = useNavigate();
 
     return (
@@ -29,7 +30,6 @@ export default function Navbar() {
                 <div className="relative cursor-pointer p-2 rounded-full hover:bg-default-100 transition-colors flex items-center">
                     <FaBell className="text-default-500 text-lg" />
                     <div className="absolute top-0 right-0">
-                        {/* Fix: size ar extra prop bad dewa holo, jate Badge.jsx er vitore DOM error na ase */}
                         <Badge content="3" color="danger" />
                     </div>
                 </div>
