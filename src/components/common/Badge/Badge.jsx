@@ -20,7 +20,6 @@ export default function Badge({
 
     const selectedColor = colorVariants[color] || colorVariants.primary;
 
-    // Jodi content na thake, tahole eta normal inline badge/pill hisabe kaj korbe
     if (!content) {
         return (
             <span className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full border shadow-sm ${selectedColor} ${className}`}>
@@ -29,15 +28,11 @@ export default function Badge({
         );
     }
 
-    const customClassNames = {
-        badge: `px-2 py-0.5 text-xs font-semibold rounded-full border shadow-sm ${selectedColor} ${className}`
-    };
-
     return (
         <HeroBadge 
             content={content}
             variant={variant} 
-            classNames={customClassNames}
+            className={className}
             {...props}
         >
             {children}
