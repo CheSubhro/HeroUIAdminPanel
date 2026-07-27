@@ -8,6 +8,7 @@ import Profile from '../pages/Profile'
 import Changepassword from '../pages/Changepassword'
 import Forgotpassword from '../pages/Forgotpassword'
 import Dashboard from '../pages/Dashboard'
+import Categories from '../pages/Categories'
 
 export default function AppRoutes() {
     return (
@@ -19,7 +20,8 @@ export default function AppRoutes() {
                 <Route path="/changepassword" element={<Changepassword />} />
                 <Route path="/forgot-password" element={<Forgotpassword />} />
                 <Route path="/profile" element={<Profile />} />
-
+                <Route path="/categories" element={<Categories />} />
+                
             </Route>
         </Routes>
     );
