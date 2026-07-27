@@ -5,6 +5,7 @@ import { validateCategory } from "../../utils/validation";
 import { FaImage, FaTimes } from "react-icons/fa";
 
 export default function CategoryForm({ initialData, categoriesList, onSubmit, onCancel }) {
+    
     const [formData, setFormData] = useState({ 
         name: "", 
         description: "", 
@@ -20,7 +21,7 @@ export default function CategoryForm({ initialData, categoriesList, onSubmit, on
                 name: initialData.name || "",
                 description: initialData.description || "",
                 parentId: initialData.parentId || "",
-                avatar: null // existing image URL alada rakhte paren jodi dorkar hoy
+                avatar: null 
             });
             setPreviewUrl(initialData.avatar || "");
         } else {
@@ -58,7 +59,6 @@ export default function CategoryForm({ initialData, categoriesList, onSubmit, on
             return;
         }
 
-        // Backend e pathanor jonno FormData use kora best hobe jodi file thake
         const dataToSend = new FormData();
         dataToSend.append("name", formData.name);
         dataToSend.append("description", formData.description);
