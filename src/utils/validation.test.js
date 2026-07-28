@@ -1,5 +1,5 @@
 
-import { validateProduct, validateCategory } from "./validation";
+import { validateProduct, validateCategory, validateRegister, validateLogin } from "./validation";
 
 describe("validateCategory Utility", () => {
     test("should return error if category name is empty", () => {
@@ -73,6 +73,60 @@ describe("validateProduct Utility", () => {
             categoryId: "1",
             image: { name: "mouse.png" },
             isEdit: false,
+        });
+
+        expect(Object.keys(errors).length).toBe(0);
+    });
+});
+
+describe("validateRegister Utility", () => {
+    test("should return errors if required register fields are missing or invalid", () => {
+        const errors = validateRegister({
+            username: "ab",
+            email: "invalid-email",
+            fullName: "",
+            password: "123",
+            role: "superhero",
+            avatar: null,
+        });
+
+        expect(errors.username).toBeDefined();
+        expect(errors.email).toBeDefined();
+        expect(errors.fullName).toBeDefined();
+        expect(errors.password).toBeDefined();
+        expect(errors.role).toBeDefined();
+        expect(errors.avatar).toBeDefined();
+    });
+
+    test("should not return errors if register data is completely valid", () => {
+        const errors = validateRegister({
+            username: "adminuser",
+            email: "admin@example.com",
+            fullName: "Admin User",
+            password: "securepassword123",
+            role: "admin",
+            avatar: "avatar.png",
+        });
+
+        expect(Object.keys(errors).length).toBe(0);
+    });
+});
+
+describe("validateLogin Utility", () => {
+    test("should return errors if login fields are missing or invalid", () => {
+        const errors = validateLogin({
+            email: "bad-email",
+            password: "",
+        });
+
+        expect(errors.email).toBeDefined();
+        expect(errors.password).toBeDefined();
+    });
+
+    test("should not return errors if login credentials are valid", () => {
+        const errors = validateLogin({
+            email: "admin@example.com",
+            password: "securepassword123",
         });
 
         expect(Object.keys(errors).length).toBe(0);
