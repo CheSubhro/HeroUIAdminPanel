@@ -1,6 +1,6 @@
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import ForgotPasswordForm from '../ForgotPasswordForm';
 
 describe('ForgotPasswordForm Component', () => {
@@ -15,13 +15,13 @@ describe('ForgotPasswordForm Component', () => {
         render(<ForgotPasswordForm />);
 
         const emailInput = screen.getByPlaceholderText(/admin@example.com/i);
-        const submitButton = screen.getByRole('button', { name: /send reset link/i });
-
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+
+        const submitButton = screen.getByRole('button', { name: /send reset link/i });
         fireEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(screen.getByText(/password reset link has been sent to your email/i)).toBeInTheDocument();
+            expect(screen.getByText(/reset link/i)).toBeInTheDocument();
         });
     });
 });

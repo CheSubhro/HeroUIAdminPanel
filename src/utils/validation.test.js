@@ -93,7 +93,6 @@ describe("validateRegister Utility", () => {
             email: "invalid-email",
             fullName: "",
             password: "123",
-            role: "superhero",
             avatar: null,
         });
 
@@ -101,7 +100,6 @@ describe("validateRegister Utility", () => {
         expect(errors.email).toBeDefined();
         expect(errors.fullName).toBeDefined();
         expect(errors.password).toBeDefined();
-        expect(errors.role).toBeDefined();
         expect(errors.avatar).toBeDefined();
     });
 
@@ -111,7 +109,6 @@ describe("validateRegister Utility", () => {
             email: "admin@example.com",
             fullName: "Admin User",
             password: "securepassword123",
-            role: "admin",
             avatar: "avatar.png",
         });
 

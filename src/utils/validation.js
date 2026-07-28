@@ -53,41 +53,24 @@ export const validateProduct = (data) => {
 };
 
 export const validateRegister = (data) => {
-
     const errors = {};
 
+    if (!data.fullName || data.fullName.trim() === '') {
+        errors.fullName = 'Full name is required';
+    }
     if (!data.username || data.username.trim() === "") {
-        errors.username = "Username is required.";
+        errors.username = "Username is required";
     } else if (data.username.trim().length < 3) {
-        errors.username = "Username must be at least 3 characters.";
+        errors.username = "Username must be at least 3 characters";
     }
-
-    if (!data.fullName || data.fullName.trim() === "") {
-        errors.fullName = "Full name is required.";
+    if (!data.email || !data.email.includes('@')) {
+        errors.email = 'Valid email is required';
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!data.email || data.email.trim() === "") {
-        errors.email = "Email is required.";
-    } else if (!emailRegex.test(data.email)) {
-        errors.email = "Please enter a valid email address.";
+    if (!data.password || data.password.length < 6) {
+        errors.password = 'Password must be at least 6 characters';
     }
-
-    if (!data.password) {
-        errors.password = "Password is required.";
-    } else if (data.password.length < 6) {
-        errors.password = "Password must be at least 6 characters long.";
-    }
-
-    const validRoles = ["admin", "moderator", "user"];
-    if (!data.role) {
-        errors.role = "Role is required.";
-    } else if (!validRoles.includes(data.role)) {
-        errors.role = "Invalid role selected.";
-    }
-
     if (!data.avatar) {
-        errors.avatar = "Avatar image is required.";
+        errors.avatar = 'Avatar is required';
     }
 
     return errors;
