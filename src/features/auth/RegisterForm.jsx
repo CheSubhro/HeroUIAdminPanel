@@ -133,24 +133,25 @@ export default function RegisterForm() {
 							type="file"
 							accept="image/*"
 							onChange={(e) => setAvatar(e.target.files[0])}
-							className="w-full text-xs text-slate-400 file:mr-4 ..."
+							className="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gradient-to-r file:from-emerald-500 file:to-teal-600 hover:file:from-emerald-600 hover:file:to-teal-700 file:text-white file:shadow-md file:shadow-emerald-900/20 cursor-pointer"
 						/>
-					</div>	
+					</div>
 					{/* Cover Image File Input */}
 					<div>
-							<label
-								htmlFor="coverImage"
-								className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5"
-							>
-								Cover Image <span className="text-slate-500">(Optional)</span>
-							</label>
-							<input
-								id="coverImage"
-								name="coverImage"
-								type="file"
-								accept="image/*"
-								onChange={(e) => setCoverImage(e.target.files[0])}
-							/>
+						<label
+							htmlFor="coverImage"
+							className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5"
+						>
+							Cover Image <span className="text-slate-500">(Optional)</span>
+						</label>
+						<input
+							id="coverImage"
+							name="coverImage"
+							type="file"
+							accept="image/*"
+							onChange={(e) => setCoverImage(e.target.files[0])}
+							className="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gradient-to-r file:from-emerald-500 file:to-teal-600 hover:file:from-emerald-600 hover:file:to-teal-700 file:text-white file:shadow-md file:shadow-emerald-900/20 cursor-pointer"
+						/>
 					</div>
 
 					<div>
