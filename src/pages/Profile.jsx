@@ -1,12 +1,14 @@
 
 import React from 'react';
-import { Card, Badge } from '../components/common';
+import { Card, Badge, Button } from '../components/common';
 import { Link } from 'react-router-dom';
-import {useAuth} from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Profile() {
-    
-    const { user } = useAuth(); 
+
+    const { user } = useAuth();
+
+    const displayName = user?.fullName || user?.name || 'Admin / Moderator';
 
     return (
         <div className="min-h-screen bg-slate-900 text-slate-100 flex items-center justify-center py-12 px-6">
@@ -31,11 +33,11 @@ export default function Profile() {
                 <Card className="p-8 bg-slate-800/50 border border-slate-800 backdrop-blur-md rounded-2xl shadow-xl space-y-6">
                     <div className="flex items-center space-x-4 border-b border-slate-700/50 pb-6">
                         <div className="w-16 h-16 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl font-bold border border-indigo-500/30">
-                            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                            {displayName.charAt(0).toUpperCase()}
                         </div>
                         <div>
                             <h3 className="text-lg font-semibold text-white">
-                                {user?.name || 'Admin / Moderator'}
+                                {displayName}
                             </h3>
                             <p className="text-xs text-slate-400">
                                 {user?.email || 'user@example.com'}
@@ -51,19 +53,15 @@ export default function Profile() {
                             <span className="text-slate-400">Status</span>
                             <span className="text-emerald-400 font-medium">Active</span>
                         </div>
-                        <div className="flex justify-between py-2 border-b border-slate-700/30">
-                            <span className="text-slate-400">Authentication</span>
-                            <span className="text-slate-200">HttpOnly Cookie (JWT)</span>
-                        </div>
                     </div>
 
                     <div className="pt-2">
-                        <button
-                            type="button"
-                            className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors text-sm shadow-lg shadow-indigo-600/25"
+                        <Button
+                            color="primary"
+                            className="w-full py-3 text-sm font-semibold flex items-center justify-center gap-2"
                         >
                             Edit Profile Settings
-                        </button>
+                        </Button>
                     </div>
                 </Card>
 
