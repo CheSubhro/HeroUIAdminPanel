@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 import LoginForm from '../features/auth/LoginForm';
 
 export default function Login() {
+    
     return (
         <div className="min-h-screen bg-slate-900 text-slate-100 flex items-center justify-center py-12 px-6">
             <div className="max-w-md w-full">
-                
+
                 {/* Header Branding */}
                 <div className="text-center mb-8">
                     <div className="inline-block mb-3">
