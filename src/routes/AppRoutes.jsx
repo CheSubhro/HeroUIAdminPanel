@@ -10,6 +10,7 @@ import Forgotpassword from '../pages/Forgotpassword'
 import Dashboard from '../pages/Dashboard'
 import Categories from '../pages/Categories'
 import Products from '../pages/Products'
+import Settings from '../pages/Settings'
 
 export default function AppRoutes() {
     return (
@@ -23,7 +24,7 @@ export default function AppRoutes() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/products" element={<Products />} />
-                
+                <Route path="/settings" element={<Settings />} />
                 
             </Route>
         </Routes>
