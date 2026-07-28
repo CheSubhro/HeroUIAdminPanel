@@ -7,7 +7,6 @@ A modern, responsive, and feature-rich Admin Panel frontend built with **React**
 
 ![Demo](screenshot/1.png)
 
-
 ![Demo](screenshot/2.png)
 
 ![Demo](screenshot/3.png)
