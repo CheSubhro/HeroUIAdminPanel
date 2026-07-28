@@ -1,147 +1,78 @@
 
-import React, { useState } from 'react';
-import { Card, Badge, Button, Input, Spinner } from '../components/common';
+import React from 'react';
+import { Card, Badge } from '../components/common';
+import { Link } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 export default function Profile() {
     
-    const [name, setName] = useState('John Doe');
-    const [email, setEmail] = useState('user@example.com');
-    const [bio, setBio] = useState('Building scalable web applications and high-performance design systems.');
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState('');
-
-    const handleUpdateProfile = (e) => {
-        e.preventDefault();
-        setError('');
-
-        if (!name || !email) {
-            setError('Name and email are required fields.');
-            return;
-        }
-
-        setLoading(true);
-
-        // Simulate backend update delay
-        setTimeout(() => {
-            setLoading(false);
-            setSuccess(true);
-            setTimeout(() => {
-                setSuccess(false);
-            }, 3000);
-        }, 1200);
-    };
+    const { user } = useAuth(); 
 
     return (
+        <div className="min-h-screen bg-slate-900 text-slate-100 flex items-center justify-center py-12 px-6">
+            <div className="max-w-md w-full">
 
-        <div className="min-h-screen bg-slate-900 text-slate-100 py-12 px-6">
-            <div className="max-w-3xl mx-auto space-y-8">
-                
-                {/* Header Section */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
-                    <div>
-                        <div className="inline-block mb-2">
-                            <Badge variant="flat" color="primary" className="px-3 py-1 text-xs">
-                                👤 Account Settings
-                            </Badge>
-                        </div>
-                        <h1 className="text-3xl font-extrabold text-white tracking-tight">
-                            My <span className="text-indigo-400">Profile</span>
-                        </h1>
-                        <p className="text-slate-400 text-sm mt-1">
-                            Manage your personal information, email preferences, and public profile details.
-                        </p>
+                {/* Header Branding */}
+                <div className="text-center mb-8">
+                    <div className="inline-block mb-3">
+                        <Badge variant="flat" color="primary" className="px-3 py-1 text-xs">
+                            👤 User Profile
+                        </Badge>
                     </div>
+                    <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+                        Account <span className="text-indigo-400">Details</span>
+                    </h1>
+                    <p className="text-slate-400 text-sm">
+                        Manage your profile information and security settings.
+                    </p>
                 </div>
 
-                {/* Profile Card Form */}
-                <Card className="p-8 bg-slate-800/50 border border-slate-800 backdrop-blur-md rounded-2xl shadow-xl">
-                    <form onSubmit={handleUpdateProfile} className="space-y-6">
-                        
-                        {success && (
-                            <div className="p-4 bg-teal-950/40 border border-teal-800/60 rounded-xl text-xs text-teal-400 font-medium text-center animate-in fade-in duration-200">
-                                🎉 Profile updated successfully!
-                            </div>
-                        )}
-
-                        {error && (
-                            <div className="p-3 bg-red-900/30 border border-red-800/50 rounded-xl text-xs text-red-400 text-center animate-in fade-in duration-200">
-                                {error}
-                            </div>
-                        )}
-
-                        {/* Avatar & Basic Info Header */}
-                        <div className="flex items-center gap-6 pb-4 border-b border-slate-800">
-                            <img 
-                                src="https://i.pravatar.cc/150?u=a042581f4e29026704d" 
-                                alt="User Avatar" 
-                                className="w-16 h-16 rounded-full ring-2 ring-indigo-500/50 object-cover"
-                            />
-                            <div>
-                                <h3 className="text-lg font-bold text-white">{name}</h3>
-                                <p className="text-xs text-slate-400">{email}</p>
-                            </div>
+                {/* Profile Information Card */}
+                <Card className="p-8 bg-slate-800/50 border border-slate-800 backdrop-blur-md rounded-2xl shadow-xl space-y-6">
+                    <div className="flex items-center space-x-4 border-b border-slate-700/50 pb-6">
+                        <div className="w-16 h-16 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl font-bold border border-indigo-500/30">
+                            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                         </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                                    Full Name
-                                </label>
-                                <Input 
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    placeholder="Enter your full name"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                                    Email Address
-                                </label>
-                                <Input 
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter your email"
-                                />
-                            </div>
-                        </div>
-
                         <div>
-                            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                                Bio / Description
-                            </label>
-                            <textarea 
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                                rows={3}
-                                className="w-full bg-slate-900/60 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all resize-none"
-                                placeholder="Write a short bio about yourself..."
-                            />
+                            <h3 className="text-lg font-semibold text-white">
+                                {user?.name || 'Admin / Moderator'}
+                            </h3>
+                            <p className="text-xs text-slate-400">
+                                {user?.email || 'user@example.com'}
+                            </p>
+                            <span className="inline-block mt-2 px-2.5 py-0.5 text-xs font-medium bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20">
+                                {user?.role || 'Administrator'}
+                            </span>
                         </div>
+                    </div>
 
-                        {/* Submit Button */}
-                        <div className="flex justify-end pt-2">
-                            <Button 
-                                type="submit"
-                                disabled={loading}
-                                className="px-6 py-3 text-sm font-semibold flex items-center justify-center gap-2"
-                            >
-                                {loading ? (
-                                    <>
-                                        <Spinner size="sm" color="white" />
-                                        <span>Saving Changes...</span>
-                                    </>
-                                ) : (
-                                    'Save Changes'
-                                )}
-                            </Button>
+                    <div className="space-y-4 text-sm">
+                        <div className="flex justify-between py-2 border-b border-slate-700/30">
+                            <span className="text-slate-400">Status</span>
+                            <span className="text-emerald-400 font-medium">Active</span>
                         </div>
+                        <div className="flex justify-between py-2 border-b border-slate-700/30">
+                            <span className="text-slate-400">Authentication</span>
+                            <span className="text-slate-200">HttpOnly Cookie (JWT)</span>
+                        </div>
+                    </div>
 
-                    </form>
+                    <div className="pt-2">
+                        <button
+                            type="button"
+                            className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors text-sm shadow-lg shadow-indigo-600/25"
+                        >
+                            Edit Profile Settings
+                        </button>
+                    </div>
                 </Card>
+
+                {/* Back Link */}
+                <div className="text-center mt-8">
+                    <Link to="/" className="text-xs text-slate-400 hover:text-slate-200 transition-colors">
+                        ← Back to Dashboard / Home
+                    </Link>
+                </div>
 
             </div>
         </div>
