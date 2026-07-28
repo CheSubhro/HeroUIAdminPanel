@@ -11,6 +11,7 @@ import Dashboard from '../pages/Dashboard'
 import Categories from '../pages/Categories'
 import Products from '../pages/Products'
 import Settings from '../pages/Settings'
+import NotFound from '../pages/NotFound'
 
 export default function AppRoutes() {
     return (
@@ -25,7 +26,8 @@ export default function AppRoutes() {
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/settings" element={<Settings />} />
-                
+
+                <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
     );
