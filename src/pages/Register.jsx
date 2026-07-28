@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 import RegisterForm from '../features/auth/RegisterForm';
 
 export default function Register() {
+    
     return (
         <div className="min-h-screen bg-slate-900 text-slate-100 flex items-center justify-center py-12 px-6">
             <div className="max-w-md w-full">
-                
+
                 {/* Header Branding */}
                 <div className="text-center mb-8">
                     <div className="inline-block mb-3">
