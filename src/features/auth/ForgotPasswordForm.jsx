@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Button } from '../../components/common';
 
 export default function ForgotPasswordForm() {
     
@@ -57,13 +58,14 @@ export default function ForgotPasswordForm() {
                 />
             </div>
 
-            <button
+            <Button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors text-sm shadow-lg shadow-indigo-600/25 disabled:opacity-50 mt-2"
+                color="primary"
+                className="w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 mt-2"
             >
                 {loading ? 'Sending Reset Link...' : 'Send Reset Link'}
-            </button>
+            </Button>
         </form>
     );
 }
