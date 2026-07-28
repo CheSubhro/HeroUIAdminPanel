@@ -110,3 +110,38 @@ export const validateLogin = (data) => {
 
     return errors;
 };
+
+export const validateForgotPassword = (data) => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!data.email || data.email.trim() === "") {
+        errors.email = "Email is required.";
+    } else if (!emailRegex.test(data.email)) {
+        errors.email = "Please enter a valid email address.";
+    }
+
+    return errors;
+};
+
+export const validateChangePassword = (data) => {
+    const errors = {};
+
+    if (!data.currentPassword) {
+        errors.currentPassword = "Current password is required.";
+    }
+
+    if (!data.newPassword) {
+        errors.newPassword = "New password is required.";
+    } else if (data.newPassword.length < 6) {
+        errors.newPassword = "New password must be at least 6 characters long.";
+    }
+
+    if (!data.confirmPassword) {
+        errors.confirmPassword = "Confirm password is required.";
+    } else if (data.newPassword !== data.confirmPassword) {
+        errors.confirmPassword = "New passwords do not match.";
+    }
+
+    return errors;
+};

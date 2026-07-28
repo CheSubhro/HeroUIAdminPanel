@@ -1,5 +1,12 @@
 
-import { validateProduct, validateCategory, validateRegister, validateLogin } from "./validation";
+import { 
+    validateProduct, 
+    validateCategory, 
+    validateRegister, 
+    validateLogin,
+    validateForgotPassword, 
+    validateChangePassword
+} from "./validation";
 
 describe("validateCategory Utility", () => {
     test("should return error if category name is empty", () => {
@@ -127,6 +134,65 @@ describe("validateLogin Utility", () => {
         const errors = validateLogin({
             email: "admin@example.com",
             password: "securepassword123",
+        });
+
+        expect(Object.keys(errors).length).toBe(0);
+    });
+});
+
+describe("validateForgotPassword Utility", () => {
+    test("should return error if email is empty or invalid", () => {
+        const emptyErrors = validateForgotPassword({ email: "" });
+        expect(emptyErrors.email).toBe("Email is required.");
+
+        const invalidErrors = validateForgotPassword({ email: "invalid-email" });
+        expect(invalidErrors.email).toBe("Please enter a valid email address.");
+    });
+
+    test("should not return error if email is valid", () => {
+        const errors = validateForgotPassword({ email: "user@example.com" });
+        expect(errors.email).toBeUndefined();
+    });
+});
+
+describe("validateChangePassword Utility", () => {
+    test("should return errors if required fields are missing", () => {
+        const errors = validateChangePassword({
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+        });
+
+        expect(errors.currentPassword).toBeDefined();
+        expect(errors.newPassword).toBeDefined();
+        expect(errors.confirmPassword).toBeDefined();
+    });
+
+    test("should return error if new password is too short", () => {
+        const errors = validateChangePassword({
+            currentPassword: "oldpassword",
+            newPassword: "123",
+            confirmPassword: "123",
+        });
+
+        expect(errors.newPassword).toBe("New password must be at least 6 characters long.");
+    });
+
+    test("should return error if passwords do not match", () => {
+        const errors = validateChangePassword({
+            currentPassword: "oldpassword",
+            newPassword: "newpassword123",
+            confirmPassword: "differentpassword",
+        });
+
+        expect(errors.confirmPassword).toBe("New passwords do not match.");
+    });
+
+    test("should not return errors if change password data is valid", () => {
+        const errors = validateChangePassword({
+            currentPassword: "oldpassword",
+            newPassword: "newpassword123",
+            confirmPassword: "newpassword123",
         });
 
         expect(Object.keys(errors).length).toBe(0);
